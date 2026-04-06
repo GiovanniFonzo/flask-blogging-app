@@ -20,3 +20,33 @@ Tkinter GUI → Flask API → SQLAlchemy → MySQL
 - Posts are immutable after creation
 - Anyone can read posts and categories
 
+## Data model
+
+### User
+- id
+- first_name
+- last_name
+- email
+- password_hash
+- token
+- is_admin
+
+### Category
+- id
+- name
+
+### Post
+- id
+- title
+- content
+- user_id
+- category_id
+- created_at
+
+## Relationships
+- One user can create many posts
+- One category can contain many posts
+- One post belongs to one user
+- One post belongs to one category
+
+
