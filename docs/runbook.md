@@ -1,10 +1,10 @@
 # Runbook
 
 ## Project purpose
-A desktop GUI blogging app backed by a Flask JSON API and MySQL database.
+A desktop GUI blogging app backed by a Flask JSON API and PostgreSQL database.
 
 ## Architecture
-Tkinter GUI → Flask API → SQLAlchemy → MySQL
+Tkinter GUI → Flask API → SQLAlchemy PostgreSQL
 
 ## Main files
 - `backend.py` → backend API

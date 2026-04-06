@@ -4,7 +4,7 @@ A Python blogging application with:
 
 - Flask backend API
 - SQLAlchemy ORM
-- MySQL database
+- PostgreSQL database
 - Tkinter desktop frontend
 
 ## Main rules
