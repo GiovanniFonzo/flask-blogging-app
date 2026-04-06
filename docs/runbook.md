@@ -49,4 +49,11 @@ Tkinter GUI → Flask API → SQLAlchemy PostgreSQL
 - One post belongs to one user
 - One post belongs to one category
 
+## Environment variables
 
+This project uses a `.env` file to store the database connection string.
+
+Example:
+
+```env
+DATABASE_URL=postgresql+psycopg2://username:password@localhost/blogging_app

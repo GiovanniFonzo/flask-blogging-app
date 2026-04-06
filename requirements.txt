@@ -3,4 +3,4 @@ SQLAlchemy
 psycopg2-binary
 requests
 Werkzeug
-
+python-dotenv
