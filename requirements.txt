@@ -1,6 +1,6 @@
 Flask
 SQLAlchemy
-PyMySQL
+psycopg2-binary
 requests
 Werkzeug
 
