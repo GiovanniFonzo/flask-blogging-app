@@ -57,3 +57,11 @@ Example:
 
 ```env
 DATABASE_URL=postgresql+psycopg2://username:password@localhost/blogging_app
+
+## Login flow
+
+- The user logs in with generated email and password
+- The backend verifies the hashed password
+- On successful login, the backend generates a UUID token
+- The token is stored on the user record
+- Protected routes will use this token to identify the logged-in user

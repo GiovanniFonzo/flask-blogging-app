@@ -98,6 +98,7 @@ Post
 - category_id -> Category.id
 - created_at
 
-
+- Users can log in with email and password
+- Successful login returns a UUID token used for authenticated actions
 
 
