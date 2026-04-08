@@ -1,9 +1,10 @@
 from flask import Flask, request, jsonify
 from sqlalchemy import create_engine, Column, Integer, String, Boolean
 from sqlalchemy.orm import declarative_base, sessionmaker
-from werkzeug.security import generate_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
 from dotenv import load_dotenv
 import os
+import uuid
 
 load_dotenv()
 
@@ -75,6 +76,41 @@ def register():
         }
     }), 201
 
+
+@app.route("/login", methods=["POST"])
+def login():
+    data = request.get_json()
+
+    email = data.get("email")
+    password = data.get("password")
+
+    if not email or not password:
+        return jsonify({"error": "email and password are required"}), 400
+
+    session = SessionLocal()
+
+    user = session.query(User).filter_by(email=email).first()
+
+    if not user or not check_password_hash(user.password_hash, password):
+        session.close()
+        return jsonify({"error": "Invalid email or password"}), 401
+
+    user.token = str(uuid.uuid4())
+    session.commit()
+    session.refresh(user)
+    session.close()
+
+    return jsonify({
+        "message": "Login successful",
+        "token": user.token,
+        "user": {
+            "id": user.id,
+            "first_name": user.first_name,
+            "last_name": user.last_name,
+            "email": user.email,
+            "is_admin": user.is_admin
+        }
+    }), 200
 
 
 @app.route("/health")
