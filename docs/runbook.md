@@ -65,3 +65,11 @@ DATABASE_URL=postgresql+psycopg2://username:password@localhost/blogging_app
 - On successful login, the backend generates a UUID token
 - The token is stored on the user record
 - Protected routes will use this token to identify the logged-in user
+
+## Categories
+
+- Categories are stored in the `categories` table
+- Categories are publicly readable through `GET /categories`
+- At this stage, category management routes are not yet added
+
+

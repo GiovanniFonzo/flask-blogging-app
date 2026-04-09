@@ -28,6 +28,13 @@ class User(Base):
     is_admin = Column(Boolean, default=False, nullable=False)
 
 
+class Category(Base):
+    __tablename__ = "categories"
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String(100), unique=True, nullable=False)
+
+
 Base.metadata.create_all(bind=engine)
 
 @app.route("/register", methods=["POST"])
@@ -111,6 +118,22 @@ def login():
             "is_admin": user.is_admin
         }
     }), 200
+
+
+@app.route("/categories", methods=["GET"])
+def get_categories():
+    session = SessionLocal()
+    categories = session.query(Category).all()
+
+    result = []
+    for category in categories:
+        result.append({
+            "id": category.id,
+            "name": category.name
+        })
+
+    session.close()
+    return jsonify(result), 200
 
 
 @app.route("/health")
