@@ -180,6 +180,86 @@ def create_category():
     }), 201
 
 
+@app.route("/categories/<int:category_id>", methods=["PUT"])
+def update_category(category_id):
+    token = request.headers.get("Authorization")
+    data = request.get_json()
+
+    name = data.get("name") if data else None
+
+    if not token:
+        return jsonify({"error": "Authorization token is required"}), 401
+
+    if not name:
+        return jsonify({"error": "Category name is required"}), 400
+
+    session = SessionLocal()
+
+    user = session.query(User).filter_by(token=token).first()
+    if not user:
+        session.close()
+        return jsonify({"error": "Invalid token"}), 401
+
+    if not user.is_admin:
+        session.close()
+        return jsonify({"error": "Admin access required"}), 403
+
+    category = session.query(Category).filter_by(id=category_id).first()
+    if not category:
+        session.close()
+        return jsonify({"error": "Category not found"}), 404
+
+    existing_category = session.query(Category).filter_by(name=name).first()
+    if existing_category and existing_category.id != category_id:
+        session.close()
+        return jsonify({"error": "Category already exists"}), 400
+
+    category.name = name
+    session.commit()
+    session.refresh(category)
+    session.close()
+
+    return jsonify({
+        "message": "Category updated successfully",
+        "category": {
+            "id": category.id,
+            "name": category.name
+        }
+    }), 200
+
+
+
+@app.route("/categories/<int:category_id>", methods=["DELETE"])
+def delete_category(category_id):
+    token = request.headers.get("Authorization")
+
+    if not token:
+        return jsonify({"error": "Authorization token is required"}), 401
+
+    session = SessionLocal()
+
+    user = session.query(User).filter_by(token=token).first()
+    if not user:
+        session.close()
+        return jsonify({"error": "Invalid token"}), 401
+
+    if not user.is_admin:
+        session.close()
+        return jsonify({"error": "Admin access required"}), 403
+
+    category = session.query(Category).filter_by(id=category_id).first()
+    if not category:
+        session.close()
+        return jsonify({"error": "Category not found"}), 404
+
+    session.delete(category)
+    session.commit()
+    session.close()
+
+    return jsonify({"message": "Category deleted successfully"}), 200
+
+
+
 @app.route("/health")
 def health():
     return {"status": "ok"}

@@ -81,3 +81,13 @@ DATABASE_URL=postgresql+psycopg2://username:password@localhost/blogging_app
 - Non-admin users receive a `403 Admin access required` response
 
 
+## Admin category update and delete
+
+- `PUT /categories/<id>` requires an admin token in the `Authorization` header
+- `DELETE /categories/<id>` also requires an admin token
+- Invalid or missing tokens are rejected
+- Non-admin users receive `403 Admin access required`
+- Updating a category checks for duplicate names
+- Deleting a category currently works if the category exists and no additional post rule has been added yet
+
+

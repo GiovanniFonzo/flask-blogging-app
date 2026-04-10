@@ -10,4 +10,7 @@
 
 - Implemented admin-only category creation with token-based authentication, role checks, duplicate protection, and JSON API responses.
 
+- Added administrator-only category update and delete routes with token validation, role checks, and category existence handling.
+
+
 
