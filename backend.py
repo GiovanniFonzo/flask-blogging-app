@@ -136,6 +136,50 @@ def get_categories():
     return jsonify(result), 200
 
 
+@app.route("/categories", methods=["POST"])
+def create_category():
+    token = request.headers.get("Authorization")
+    data = request.get_json()
+
+    name = data.get("name") if data else None
+
+    if not token:
+        return jsonify({"error": "Authorization token is required"}), 401
+
+    if not name:
+        return jsonify({"error": "Category name is required"}), 400
+
+    session = SessionLocal()
+
+    user = session.query(User).filter_by(token=token).first()
+    if not user:
+        session.close()
+        return jsonify({"error": "Invalid token"}), 401
+
+    if not user.is_admin:
+        session.close()
+        return jsonify({"error": "Admin access required"}), 403
+
+    existing_category = session.query(Category).filter_by(name=name).first()
+    if existing_category:
+        session.close()
+        return jsonify({"error": "Category already exists"}), 400
+
+    category = Category(name=name)
+    session.add(category)
+    session.commit()
+    session.refresh(category)
+    session.close()
+
+    return jsonify({
+        "message": "Category created successfully",
+        "category": {
+            "id": category.id,
+            "name": category.name
+        }
+    }), 201
+
+
 @app.route("/health")
 def health():
     return {"status": "ok"}

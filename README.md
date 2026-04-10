@@ -101,6 +101,5 @@ Post
 - Users can log in with email and password
 - Successful login returns a UUID token used for authenticated actions
 - Anyone can read the list of categories through the API
-
-
+- Admin users can create categories through a protected API route
 

@@ -72,4 +72,12 @@ DATABASE_URL=postgresql+psycopg2://username:password@localhost/blogging_app
 - Categories are publicly readable through `GET /categories`
 - At this stage, category management routes are not yet added
 
+## Admin category creation
+
+- `POST /categories` requires an `Authorization` token header
+- The backend looks up the user by token
+- Only users with `is_admin = true` can create categories
+- Duplicate category names are rejected
+- Non-admin users receive a `403 Admin access required` response
+
 

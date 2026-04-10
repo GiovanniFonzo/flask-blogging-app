@@ -7,3 +7,7 @@
 - Implemented token-based login using password-hash verification and UUID authentication tokens stored against registered users.
 
 - Added a category model and public JSON endpoint for listing content categories from PostgreSQL through Flask.
+
+- Implemented admin-only category creation with token-based authentication, role checks, duplicate protection, and JSON API responses.
+
+
