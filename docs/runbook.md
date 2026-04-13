@@ -104,4 +104,12 @@ DATABASE_URL=postgresql+psycopg2://username:password@localhost/blogging_app
 - Missing post ids return `404 Post not found`
 - No authentication is required for reading posts
 
+## Immutable posts
+
+- Posts can be created through `POST /posts`
+- Posts can be read through `GET /posts` and `GET /posts/<id>`
+- Posts cannot be updated or deleted
+- No `PUT` or `DELETE` routes are implemented for posts
+- This business rule is enforced at the backend level
+
 

@@ -105,4 +105,6 @@ Post
 - Admin users can update and delete categories through protected API routes
 - Logged-in users can create posts that belong to a category
 - Anyone can read all posts or a single post without logging in
+- Posts are immutable after creation and cannot be edited or deleted
+
 

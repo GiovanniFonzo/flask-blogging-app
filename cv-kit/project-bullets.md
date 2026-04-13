@@ -16,6 +16,8 @@
 
 - Exposed public post list and detail endpoints with nested author and category data using SQLAlchemy relationships and JSON serialization.
 
+- Enforced immutable post rules by exposing create/read routes only and intentionally omitting post update/delete operations at the backend level.
+
 
 
 
