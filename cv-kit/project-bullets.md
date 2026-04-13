@@ -18,6 +18,8 @@
 
 - Enforced immutable post rules by exposing create/read routes only and intentionally omitting post update/delete operations at the backend level.
 
+- Built a Tkinter desktop client for a Flask blogging API with registration, login, token-aware session state, category/post listing, and authenticated post creation.
+
 
 
 

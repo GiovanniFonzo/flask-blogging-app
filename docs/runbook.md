@@ -112,4 +112,26 @@ DATABASE_URL=postgresql+psycopg2://username:password@localhost/blogging_app
 - No `PUT` or `DELETE` routes are implemented for posts
 - This business rule is enforced at the backend level
 
+## Tkinter frontend
+
+The frontend is a Tkinter desktop application that acts as a client for the Flask API.
+
+### Current frontend features
+- User registration form
+- User login form
+- Status label showing logged-in user
+- Category listing
+- Post listing
+- Authenticated post creation
+
+### Frontend auth state
+- After login, the frontend stores the returned token in memory
+- The frontend also stores the current user details
+- Protected requests send the token in the `Authorization` header
+
+### Frontend/backend separation
+- Tkinter does not access PostgreSQL directly
+- Tkinter only communicates with the Flask backend through HTTP requests
+- Business rules are enforced by the backend, not only by the GUI
+
 

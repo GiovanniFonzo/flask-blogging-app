@@ -107,4 +107,15 @@ Post
 - Anyone can read all posts or a single post without logging in
 - Posts are immutable after creation and cannot be edited or deleted
 
+## Frontend
+
+The project includes a Tkinter desktop frontend that communicates with the Flask backend API.
+
+Current frontend features:
+- Register a user
+- Log in a user
+- View categories
+- View posts
+- Create a post when logged in
+
 
