@@ -12,5 +12,8 @@
 
 - Added administrator-only category update and delete routes with token validation, role checks, and category existence handling.
 
+- Built authenticated post creation linked to users and categories using Flask, SQLAlchemy relationships, PostgreSQL foreign keys, and token-based authorization.
+
+
 
 

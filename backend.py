@@ -1,10 +1,11 @@
 from flask import Flask, request, jsonify
-from sqlalchemy import create_engine, Column, Integer, String, Boolean
-from sqlalchemy.orm import declarative_base, sessionmaker
+from sqlalchemy import create_engine, Column, Integer, String, Boolean, ForeignKey, DateTime
+from sqlalchemy.orm import declarative_base, sessionmaker, relationship
 from werkzeug.security import generate_password_hash, check_password_hash
 from dotenv import load_dotenv
 import os
 import uuid
+from datetime import datetime
 
 load_dotenv()
 
@@ -26,13 +27,30 @@ class User(Base):
     password_hash = Column(String(255), nullable=False)
     token = Column(String(255), nullable=True)
     is_admin = Column(Boolean, default=False, nullable=False)
-
+    
+    posts = relationship("Post", back_populates="author")
 
 class Category(Base):
     __tablename__ = "categories"
 
     id = Column(Integer, primary_key=True)
     name = Column(String(100), unique=True, nullable=False)
+
+    posts = relationship("Post", back_populates="category")
+
+
+class Post(Base):
+    __tablename__ = "posts"
+
+    id = Column(Integer, primary_key=True)
+    title = Column(String(255), nullable=False)
+    content = Column(String(2000), nullable=False)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    category_id = Column(Integer, ForeignKey("categories.id"), nullable=False)
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+
+    author = relationship("User", back_populates="posts")
+    category = relationship("Category", back_populates="posts")
 
 
 Base.metadata.create_all(bind=engine)
@@ -258,6 +276,57 @@ def delete_category(category_id):
 
     return jsonify({"message": "Category deleted successfully"}), 200
 
+
+@app.route("/posts", methods=["POST"])
+def create_post():
+    token = request.headers.get("Authorization")
+    data = request.get_json()
+
+    title = data.get("title") if data else None
+    content = data.get("content") if data else None
+    category_id = data.get("category_id") if data else None
+
+    if not token:
+        return jsonify({"error": "Authorization token is required"}), 401
+
+    if not title or not content or not category_id:
+        return jsonify({"error": "title, content, and category_id are required"}), 400
+
+    session = SessionLocal()
+
+    user = session.query(User).filter_by(token=token).first()
+    if not user:
+        session.close()
+        return jsonify({"error": "Invalid token"}), 401
+
+    category = session.query(Category).filter_by(id=category_id).first()
+    if not category:
+        session.close()
+        return jsonify({"error": "Category not found"}), 404
+
+    post = Post(
+        title=title,
+        content=content,
+        user_id=user.id,
+        category_id=category.id
+    )
+
+    session.add(post)
+    session.commit()
+    session.refresh(post)
+    session.close()
+
+    return jsonify({
+        "message": "Post created successfully",
+        "post": {
+            "id": post.id,
+            "title": post.title,
+            "content": post.content,
+            "user_id": post.user_id,
+            "category_id": post.category_id,
+            "created_at": post.created_at.isoformat()
+        }
+    }), 201
 
 
 @app.route("/health")

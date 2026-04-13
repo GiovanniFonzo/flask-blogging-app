@@ -80,7 +80,13 @@ DATABASE_URL=postgresql+psycopg2://username:password@localhost/blogging_app
 - Duplicate category names are rejected
 - Non-admin users receive a `403 Admin access required` response
 
+## Post creation
 
+- `POST /posts` requires an `Authorization` token header
+- The backend resolves the logged-in user from the token
+- A valid `category_id` must exist before a post can be created
+- Required fields are `title`, `content`, and `category_id`
+- Each post is stored with `user_id`, `category_id`, and `created_at`
 ## Admin category update and delete
 
 - `PUT /categories/<id>` requires an admin token in the `Authorization` header
