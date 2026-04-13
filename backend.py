@@ -329,6 +329,65 @@ def create_post():
     }), 201
 
 
+@app.route("/posts", methods=["GET"])
+def get_posts():
+    session = SessionLocal()
+    posts = session.query(Post).all()
+
+    result = []
+    for post in posts:
+        result.append({
+            "id": post.id,
+            "title": post.title,
+            "content": post.content,
+            "created_at": post.created_at.isoformat(),
+            "author": {
+                "id": post.author.id,
+                "first_name": post.author.first_name,
+                "last_name": post.author.last_name,
+                "email": post.author.email
+            },
+            "category": {
+                "id": post.category.id,
+                "name": post.category.name
+            }
+        })
+
+    session.close()
+    return jsonify(result), 200
+
+
+@app.route("/posts/<int:post_id>", methods=["GET"])
+def get_post(post_id):
+    session = SessionLocal()
+    post = session.query(Post).filter_by(id=post_id).first()
+
+    if not post:
+        session.close()
+        return jsonify({"error": "Post not found"}), 404
+
+    result = {
+        "id": post.id,
+        "title": post.title,
+        "content": post.content,
+        "created_at": post.created_at.isoformat(),
+        "author": {
+            "id": post.author.id,
+            "first_name": post.author.first_name,
+            "last_name": post.author.last_name,
+            "email": post.author.email
+        },
+        "category": {
+            "id": post.category.id,
+            "name": post.category.name
+        }
+    }
+
+    session.close()
+    return jsonify(result), 200
+
+
+
 @app.route("/health")
 def health():
     return {"status": "ok"}

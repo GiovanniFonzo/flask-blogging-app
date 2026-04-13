@@ -14,6 +14,9 @@
 
 - Built authenticated post creation linked to users and categories using Flask, SQLAlchemy relationships, PostgreSQL foreign keys, and token-based authorization.
 
+- Exposed public post list and detail endpoints with nested author and category data using SQLAlchemy relationships and JSON serialization.
+
+
 
 
 

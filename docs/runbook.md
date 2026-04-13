@@ -96,4 +96,12 @@ DATABASE_URL=postgresql+psycopg2://username:password@localhost/blogging_app
 - Updating a category checks for duplicate names
 - Deleting a category currently works if the category exists and no additional post rule has been added yet
 
+## Public post reading
+
+- `GET /posts` returns all posts publicly
+- `GET /posts/<id>` returns one post publicly
+- Responses include nested author and category information
+- Missing post ids return `404 Post not found`
+- No authentication is required for reading posts
+
 
