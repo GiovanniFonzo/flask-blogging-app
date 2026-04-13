@@ -134,4 +134,39 @@ The frontend is a Tkinter desktop application that acts as a client for the Flas
 - Tkinter only communicates with the Flask backend through HTTP requests
 - Business rules are enforced by the backend, not only by the GUI
 
+## Frontend mental model
+
+The frontend is built as a class-based Tkinter application.
+
+### Core structure
+
+Tk root window  
+→ `BloggingAppGUI` object  
+→ static shell (title, status, buttons, output area)  
+→ dynamic workflows (register, login, create post, list categories, list posts)  
+→ shared API helper  
+→ Flask backend  
+→ JSON response  
+→ GUI update
+
+### App startup flow
+
+1. Create the Tkinter root window
+2. Create the `BloggingAppGUI` object
+3. The object initializes app state such as token and current user
+4. The object builds the static layout
+5. `mainloop()` starts the GUI event loop
+
+### User interaction flow
+
+1. The user clicks a button
+2. The matching GUI method runs
+3. The method may build a form or call the backend
+4. The backend returns a JSON response
+5. The frontend updates the output area, status label, or popup message
+
+### Design summary
+
+The frontend is designed so that Tkinter handles interface state and user interaction, while Flask handles business rules, authentication, and database access.
+
 

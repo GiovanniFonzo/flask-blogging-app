@@ -118,4 +118,18 @@ Current frontend features:
 - View posts
 - Create a post when logged in
 
+## Frontend design
+
+The frontend is a class-based Tkinter app where one `BloggingAppGUI` object manages the window, stores app state, builds reusable UI sections, handles button workflows, and communicates with the Flask backend through a shared API helper.
+
+### Frontend flow
+
+Tk root window  
+→ `BloggingAppGUI` object  
+→ static shell (title, status, buttons, output)  
+→ dynamic workflows (register, login, create post, list data)  
+→ API helper sends requests to Flask  
+→ backend returns JSON  
+→ frontend updates output, status, and messages
+
 
