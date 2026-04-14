@@ -40,6 +40,10 @@ class BloggingAppGUI:
         tk.Button(button_frame, text="Create Post", width=15, command=self.show_create_post_form).grid(row=0, column=2, padx=5, pady=5)
         tk.Button(button_frame, text="List Posts", width=15, command=self.show_posts).grid(row=0, column=3, padx=5, pady=5)
         tk.Button(button_frame, text="List Categories", width=15, command=self.show_categories).grid(row=0, column=4, padx=5, pady=5)
+        tk.Button(button_frame, text="Create Category", width=15, command=self.show_create_category_form).grid(row=1, column=0, padx=5, pady=5)
+        tk.Button(button_frame, text="Update Category", width=15, command=self.show_update_category_form).grid(row=1, column=1, padx=5, pady=5)
+        tk.Button(button_frame, text="Delete Category", width=15, command=self.show_delete_category_form).grid(row=1, column=2, padx=5, pady=5)
+
 
         self.form_frame = tk.Frame(self.root)
         self.form_frame.pack(pady=10, fill="x")
@@ -326,6 +330,168 @@ class BloggingAppGUI:
         else:
             self.write_output(str(result))
             messagebox.showerror("Error", "Failed to load categories.")
+
+
+    def show_create_category_form(self):
+        self.clear_form()
+
+        if not self.token:
+            self.write_output("You must log in before creating a category.")
+            messagebox.showwarning("Not Logged In", "Please log in first.")
+            return
+
+        tk.Label(self.form_frame, text="Category Name").grid(row=0, column=0, padx=5, pady=5, sticky="w")
+        name_entry = tk.Entry(self.form_frame, width=30)
+        name_entry.grid(row=0, column=1, padx=5, pady=5)
+
+        def submit_category():
+            payload = {
+                "name": name_entry.get().strip()
+            }
+
+            response = self.api_request("POST", "/categories", data=payload, use_auth=True)
+
+            if response is None:
+                return
+
+            try:
+                result = response.json()
+            except ValueError:
+                self.write_output("Invalid JSON response from backend.")
+                return
+
+            if response.status_code == 201:
+                category = result.get("category", {})
+                self.write_output(
+                    "Category created successfully\n\n"
+                    f"ID: {category.get('id')}\n"
+                    f"Name: {category.get('name')}"
+                )
+                messagebox.showinfo("Success", "Category created successfully.")
+            else:
+                self.write_output(str(result))
+                messagebox.showerror("Create Category Failed", result.get("error", "Unknown error"))
+
+        tk.Button(self.form_frame, text="Submit Category", command=submit_category).grid(
+            row=1, column=1, padx=5, pady=10, sticky="w"
+        )
+
+        self.write_output("Create Category form loaded.")
+
+
+
+    def show_update_category_form(self):
+        self.clear_form()
+
+        if not self.token:
+            self.write_output("You must log in before updating a category.")
+            messagebox.showwarning("Not Logged In", "Please log in first.")
+            return
+
+        tk.Label(self.form_frame, text="Category ID").grid(row=0, column=0, padx=5, pady=5, sticky="w")
+        category_id_entry = tk.Entry(self.form_frame, width=20)
+        category_id_entry.grid(row=0, column=1, padx=5, pady=5, sticky="w")
+
+        tk.Label(self.form_frame, text="New Category Name").grid(row=1, column=0, padx=5, pady=5, sticky="w")
+        name_entry = tk.Entry(self.form_frame, width=30)
+        name_entry.grid(row=1, column=1, padx=5, pady=5)
+
+        def submit_update():
+            category_id_raw = category_id_entry.get().strip()
+
+            try:
+                category_id = int(category_id_raw)
+            except ValueError:
+                messagebox.showerror("Invalid Input", "Category ID must be a number.")
+                return
+
+            payload = {
+                "name": name_entry.get().strip()
+            }
+
+            response = self.api_request("PUT", f"/categories/{category_id}", data=payload, use_auth=True)
+
+            if response is None:
+                return
+
+            try:
+                result = response.json()
+            except ValueError:
+                self.write_output("Invalid JSON response from backend.")
+                return
+
+            if response.status_code == 200:
+                category = result.get("category", {})
+                self.write_output(
+                    "Category updated successfully\n\n"
+                    f"ID: {category.get('id')}\n"
+                    f"Name: {category.get('name')}"
+                )
+                messagebox.showinfo("Success", "Category updated successfully.")
+            else:
+                self.write_output(str(result))
+                messagebox.showerror("Update Category Failed", result.get("error", "Unknown error"))
+
+        tk.Button(self.form_frame, text="Submit Update", command=submit_update).grid(
+            row=2, column=1, padx=5, pady=10, sticky="w"
+        )
+
+        self.write_output("Update Category form loaded.")
+
+
+    def show_delete_category_form(self):
+        self.clear_form()
+
+        if not self.token:
+            self.write_output("You must log in before deleting a category.")
+            messagebox.showwarning("Not Logged In", "Please log in first.")
+            return
+
+        tk.Label(self.form_frame, text="Category ID").grid(row=0, column=0, padx=5, pady=5, sticky="w")
+        category_id_entry = tk.Entry(self.form_frame, width=20)
+        category_id_entry.grid(row=0, column=1, padx=5, pady=5, sticky="w")
+
+        def submit_delete():
+            category_id_raw = category_id_entry.get().strip()
+
+            try:
+                category_id = int(category_id_raw)
+            except ValueError:
+                messagebox.showerror("Invalid Input", "Category ID must be a number.")
+                return
+
+            confirm = messagebox.askyesno(
+                "Confirm Delete",
+                f"Are you sure you want to delete category ID {category_id}?"
+            )
+            if not confirm:
+                return
+
+            response = self.api_request("DELETE", f"/categories/{category_id}", use_auth=True)
+
+            if response is None:
+                return
+
+            try:
+                result = response.json()
+            except ValueError:
+                self.write_output("Invalid JSON response from backend.")
+                return
+
+            if response.status_code == 200:
+                self.write_output(result.get("message", "Category deleted successfully."))
+                messagebox.showinfo("Success", "Category deleted successfully.")
+            else:
+                self.write_output(str(result))
+                messagebox.showerror("Delete Category Failed", result.get("error", "Unknown error"))
+
+        tk.Button(self.form_frame, text="Delete Category", command=submit_delete).grid(
+            row=1, column=1, padx=5, pady=10, sticky="w"
+        )
+
+        self.write_output("Delete Category form loaded.")
+
+
 
 
 if __name__ == "__main__":

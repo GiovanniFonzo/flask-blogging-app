@@ -117,6 +117,7 @@ Current frontend features:
 - View categories
 - View posts
 - Create a post when logged in
+- The Tkinter frontend includes admin category management tools for authorized users
 
 ## Frontend design
 
@@ -155,4 +156,5 @@ The frontend is built as a class-based Tkinter application. One `BloggingAppGUI`
 The backend is built as a Flask API. The Flask app object registers route functions for each HTTP endpoint, while model classes such as `User`, `Post`, and `Category` define the database structure and relationships.
 
 In short, the frontend uses one persistent GUI object because it manages screen state during the session, while the backend uses a Flask app object plus route handlers because it processes requests one at a time.
+
 

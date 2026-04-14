@@ -20,6 +20,7 @@
 
 - Built a desktop blogging application with a Tkinter GUI client, Flask JSON API, SQLAlchemy, and PostgreSQL, implementing user registration, hashed-password authentication, UUID token-based login, admin-managed categories, post/category listing, and authenticated post creation.
 
+- Extended the Tkinter desktop client with admin-only category management workflows for creating, updating, and deleting categories through token-authenticated Flask API calls.
 
 
 

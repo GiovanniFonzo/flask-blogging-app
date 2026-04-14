@@ -205,3 +205,17 @@ The frontend is designed so that Tkinter handles interface state and user intera
 - Check that protected routes require authentication correctly
 
 
+## Admin category tools in Tkinter
+
+The frontend includes admin-facing category management screens.
+
+### Current admin GUI features
+- Create Category
+- Update Category
+- Delete Category
+
+### Behavior
+- The GUI requires the user to be logged in before admin actions
+- The frontend sends the saved token in the `Authorization` header
+- The backend remains the source of truth for permission checks
+- Non-admin users may reach the form, but the backend rejects unauthorized actions
