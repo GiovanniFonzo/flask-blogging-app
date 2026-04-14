@@ -4,7 +4,7 @@
 A desktop GUI blogging app backed by a Flask JSON API and PostgreSQL database.
 
 ## Architecture
-Tkinter GUI → Flask API → SQLAlchemy PostgreSQL
+Tkinter GUI → Flask API → SQLAlchemy → PostgreSQL
 
 ## Main files
 - `backend.py` → backend API
@@ -48,7 +48,6 @@ Tkinter GUI → Flask API → SQLAlchemy PostgreSQL
 - One category can contain many posts
 - One post belongs to one user
 - One post belongs to one category
-
 ## Environment variables
 
 This project uses a `.env` file to store the database connection string.
@@ -57,6 +56,7 @@ Example:
 
 ```env
 DATABASE_URL=postgresql+psycopg2://username:password@localhost/blogging_app
+
 
 ## Login flow
 
@@ -168,5 +168,40 @@ Tk root window
 ### Design summary
 
 The frontend is designed so that Tkinter handles interface state and user interaction, while Flask handles business rules, authentication, and database access.
+
+## Runtime Flow
+
+1. Start the Flask backend.
+2. Start the Tkinter frontend.
+3. Register or log in through the GUI.
+4. The frontend sends JSON requests to the backend API.
+5. The backend processes the request, interacts with the database, and returns JSON responses.
+6. The frontend updates the GUI with the result.
+
+## Validation Checklist
+
+- Register a new user successfully
+- Log in successfully and receive a token
+- Create a category as an admin user
+- Create a blog post as a logged-in user
+- View categories without logging in
+- View posts without logging in
+
+## Troubleshooting
+
+### Frontend cannot connect to backend
+- Check that the Flask server is running
+- Check that the API base URL in the frontend matches the backend address
+- Check that the backend port is correct
+
+### Database errors
+- Check that PostgreSQL is running
+- Check that the database name, username, and password are correct
+- Check that the tables have been created
+
+### Unauthorized or token errors
+- Log in again to get a new token
+- Make sure the frontend is sending the token in the request
+- Check that protected routes require authentication correctly
 
 
