@@ -136,17 +136,15 @@ Tk root window
 
 This project is split into three layers:
 
-```text
-Tkinter GUI (frontend)
-        │
-        │ HTTP requests with JSON
-        ▼
-Flask API (backend)
-        │
-        │ SQLAlchemy queries
-        ▼
-PostgreSQL database
-
+    Tkinter GUI (frontend)
+            │
+            │ HTTP requests with JSON
+            ▼
+    Flask API (backend)
+            │
+            │ SQLAlchemy queries
+            ▼
+    PostgreSQL database
 
 The Tkinter frontend is the only interface the user interacts with. It sends JSON requests to the Flask backend, which handles business logic, interacts with the database through SQLAlchemy, and returns JSON responses back to the GUI.
 
