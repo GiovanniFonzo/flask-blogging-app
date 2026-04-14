@@ -145,15 +145,16 @@ Flask API (backend)
         │
         │ SQLAlchemy queries
         ▼
-MySQL database
+PostgreSQL database
+
 
 The Tkinter frontend is the only interface the user interacts with. It sends JSON requests to the Flask backend, which handles business logic, interacts with the database through SQLAlchemy, and returns JSON responses back to the GUI.
 
-Frontend and Backend Design
+### Frontend and Backend Design
 
-The frontend is built as a class-based Tkinter application. One BloggingAppGUI object manages the window, stores app state such as the logged-in user and token, builds the layout, and handles workflows like register, login, and create post.
+The frontend is built as a class-based Tkinter application. One `BloggingAppGUI` object manages the window, stores app state such as the logged-in user and token, builds the layout, and handles workflows like register, login, and create post.
 
-The backend is built as a Flask API. The Flask app object registers route functions for each HTTP endpoint, while model classes such as User, Post, and Category define the database structure and relationships.
+The backend is built as a Flask API. The Flask app object registers route functions for each HTTP endpoint, while model classes such as `User`, `Post`, and `Category` define the database structure and relationships.
 
 In short, the frontend uses one persistent GUI object because it manages screen state during the session, while the backend uses a Flask app object plus route handlers because it processes requests one at a time.
 
