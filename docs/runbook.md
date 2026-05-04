@@ -219,3 +219,16 @@ The frontend includes admin-facing category management screens.
 - The frontend sends the saved token in the `Authorization` header
 - The backend remains the source of truth for permission checks
 - Non-admin users may reach the form, but the backend rejects unauthorized actions
+
+
+## Create Post category dropdown
+
+The Create Post form loads categories dynamically from `GET /categories`.
+
+### Behavior
+- The frontend requests categories from the backend when the Create Post form opens
+- Categories are displayed in a dropdown using the format `id - name`
+- The selected dropdown value is mapped back to the correct `category_id`
+- This improves usability compared with manually typing category IDs
+
+

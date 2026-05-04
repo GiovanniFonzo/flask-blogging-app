@@ -1,8 +1,8 @@
 import tkinter as tk
-from tkinter import messagebox, scrolledtext
+from tkinter import messagebox, scrolledtext, ttk
 import requests
 
-API_BASE_URL = "http://127.0.0.1:5000"
+API_BASE_URL = "http://127.0.0.1:5050"
 
 
 class BloggingAppGUI:
@@ -211,19 +211,48 @@ class BloggingAppGUI:
         content_text = tk.Text(self.form_frame, width=50, height=10)
         content_text.grid(row=1, column=1, padx=5, pady=5)
 
-        tk.Label(self.form_frame, text="Category ID").grid(row=2, column=0, padx=5, pady=5, sticky="w")
-        category_id_entry = tk.Entry(self.form_frame, width=20)
-        category_id_entry.grid(row=2, column=1, padx=5, pady=5, sticky="w")
+        tk.Label(self.form_frame, text="Category").grid(row=2, column=0, padx=5, pady=5, sticky="w")
+
+        category_response = self.api_request("GET", "/categories")
+        category_map = {}
+
+        if category_response is None:
+            return
+
+        try:
+            categories = category_response.json()
+        except ValueError:
+            self.write_output("Invalid JSON response from backend.")
+            return
+
+        if category_response.status_code != 200:
+            self.write_output(str(categories))
+            messagebox.showerror("Error", "Failed to load categories.")
+            return
+
+        if not categories:
+            self.write_output("No categories available. Ask an admin to create one first.")
+            messagebox.showwarning("No Categories", "No categories available.")
+            return
+
+        category_names = []
+        for category in categories:
+            label = f"{category.get('id')} - {category.get('name')}"
+            category_names.append(label)
+            category_map[label] = category.get("id")
+
+        category_combobox = ttk.Combobox(self.form_frame, values=category_names, width=47, state="readonly")
+        category_combobox.grid(row=2, column=1, padx=5, pady=5, sticky="w")
+        category_combobox.current(0)
 
         def submit_post():
-            category_id_raw = category_id_entry.get().strip()
+            selected_category = category_combobox.get().strip()
 
-            try:
-                category_id = int(category_id_raw)
-            except ValueError:
-                messagebox.showerror("Invalid Input", "Category ID must be a number.")
+            if not selected_category:
+                messagebox.showerror("Invalid Input", "Please select a category.")
                 return
 
+            category_id = category_map.get(selected_category)
             payload = {
                 "title": title_entry.get().strip(),
                 "content": content_text.get("1.0", tk.END).strip(),

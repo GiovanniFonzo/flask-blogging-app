@@ -22,6 +22,6 @@
 
 - Extended the Tkinter desktop client with admin-only category management workflows for creating, updating, and deleting categories through token-authenticated Flask API calls.
 
-
+- Improved the Tkinter post creation workflow by loading categories dynamically from the Flask API and presenting them through a dropdown selector instead of manual category ID entry.
 
 
