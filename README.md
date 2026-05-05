@@ -20,7 +20,7 @@ A Python blogging application with:
 
 ## Architecture
 
-Tkinter GUI → Flask API → SQLAlchemy → MySQL
+Tkinter GUI → Flask API → SQLAlchemy → PostgreSQL
 
 ## Main entities
 
@@ -77,26 +77,28 @@ A blog post created by a logged-in user. Every post belongs to one category and 
 
 ## Simple schema view
 
-User
-- id
-- first_name
-- last_name
-- email
-- password_hash
-- token
-- is_admin
+### User
+- `id`
+- `first_name`
+- `last_name`
+- `email`
+- `password_hash`
+- `token`
+- `is_admin`
 
-Category
-- id
-- name
+### Category
+- `id`
+- `name`
 
-Post
-- id
-- title
-- content
-- user_id -> User.id
-- category_id -> Category.id
-- created_at
+### Post
+- `id`
+- `title`
+- `content`
+- `user_id -> User.id`
+- `category_id -> Category.id`
+- `created_at`
+
+## Backend features
 
 - Users can log in with email and password
 - Successful login returns a UUID token used for authenticated actions
@@ -107,11 +109,28 @@ Post
 - Anyone can read all posts or a single post without logging in
 - Posts are immutable after creation and cannot be edited or deleted
 
+## Backend API
+
+### Auth
+- `POST /register`
+- `POST /login`
+
+### Categories
+- `GET /categories`
+- `POST /categories`
+- `PUT /categories/<id>`
+- `DELETE /categories/<id>`
+
+### Posts
+- `GET /posts`
+- `GET /posts/<id>`
+- `POST /posts`
+
 ## Frontend
 
 The project includes a Tkinter desktop frontend that communicates with the Flask backend API.
 
-Current frontend features:
+### Current frontend features
 - Register a user
 - Log in a user
 - View categories
@@ -119,10 +138,8 @@ Current frontend features:
 - Create a post when logged in
 - The Tkinter frontend includes admin category management tools for authorized users
 - The Create Post form loads categories dynamically and shows them in a dropdown
-- The Create Post form loads categories dynamically and shows them in a dropdown
 - Admin category buttons are role-aware in the Tkinter frontend
 - The Tkinter frontend includes a logout workflow that resets the current session state
-
 
 ## Frontend design
 
@@ -138,23 +155,25 @@ Tk root window
 → backend returns JSON  
 → frontend updates output, status, and messages
 
-## Architecture Overview
+## Architecture overview
 
 This project is split into three layers:
 
-    Tkinter GUI (frontend)
-            │
-            │ HTTP requests with JSON
-            ▼
-    Flask API (backend)
-            │
-            │ SQLAlchemy queries
-            ▼
-    PostgreSQL database
+```text
+Tkinter GUI (frontend)
+        │
+        │ HTTP requests with JSON
+        ▼
+Flask API (backend)
+        │
+        │ SQLAlchemy queries
+        ▼
+PostgreSQL database
+```
 
 The Tkinter frontend is the only interface the user interacts with. It sends JSON requests to the Flask backend, which handles business logic, interacts with the database through SQLAlchemy, and returns JSON responses back to the GUI.
 
-### Frontend and Backend Design
+## Frontend and backend design
 
 The frontend is built as a class-based Tkinter application. One `BloggingAppGUI` object manages the window, stores app state such as the logged-in user and token, builds the layout, and handles workflows like register, login, and create post.
 
@@ -162,4 +181,85 @@ The backend is built as a Flask API. The Flask app object registers route functi
 
 In short, the frontend uses one persistent GUI object because it manages screen state during the session, while the backend uses a Flask app object plus route handlers because it processes requests one at a time.
 
+## Local configuration note
+
+The Flask API runs on port `5050` in this project to avoid a local port conflict on this machine.
+
+## How to Run
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/GiovanniFonzo/flask-blogging-app.git
+cd flask-blogging-app
+```
+
+### 2. Create and activate the virtual environment
+
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
+
+### 3. Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### 4. Create the `.env` file
+
+Create a `.env` file in the project root with:
+
+```env
+DATABASE_URL=postgresql+psycopg2://your_username:your_password@localhost/blogging_app
+```
+
+### 5. Start the backend
+
+```bash
+python backend.py
+```
+
+The backend runs on:
+
+`http://127.0.0.1:5050`
+
+### 6. Start the frontend
+
+Open a new terminal:
+
+```bash
+cd flask-blogging-app
+source venv/bin/activate
+python frontend.py
+```
+
+## Example workflow
+
+1. Register a user
+2. Log in with the generated email and password
+3. If logged in as admin, manage categories
+4. Create a post as a logged-in user
+5. Read categories and posts publicly through the GUI
+
+## Current status
+
+The project has been tested end to end across:
+- registration
+- login
+- logout
+- role-aware admin controls
+- category create, update, and delete
+- post creation
+- public post and category reading
+- immutable post behavior
+
+## Future improvements
+
+- Hide admin controls entirely for non-admin users instead of only disabling them
+- Refresh category and post views automatically after create/update/delete actions
+- Add more polished form validation messages
+- Add automated tests and GitHub Actions CI
+- Add category selection improvements or post detail screens in the GUI
 
