@@ -119,6 +119,10 @@ Current frontend features:
 - Create a post when logged in
 - The Tkinter frontend includes admin category management tools for authorized users
 - The Create Post form loads categories dynamically and shows them in a dropdown
+- The Create Post form loads categories dynamically and shows them in a dropdown
+- Admin category buttons are role-aware in the Tkinter frontend
+- The Tkinter frontend includes a logout workflow that resets the current session state
+
 
 ## Frontend design
 

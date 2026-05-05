@@ -24,4 +24,8 @@
 
 - Improved the Tkinter post creation workflow by loading categories dynamically from the Flask API and presenting them through a dropdown selector instead of manual category ID entry.
 
+- Improved the Tkinter post creation workflow by loading categories dynamically from the Flask API and presenting them through a dropdown selector instead of manual category ID entry.
 
+- Added role-aware admin button behavior in the Tkinter client so category management controls remain disabled for non-admin users and enable after successful admin login.
+
+- Implemented a logout workflow in the Tkinter frontend that clears token-based session state, resets UI status, and disables protected admin controls.

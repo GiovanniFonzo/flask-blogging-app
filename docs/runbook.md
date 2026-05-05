@@ -232,3 +232,37 @@ The Create Post form loads categories dynamically from `GET /categories`.
 - This improves usability compared with manually typing category IDs
 
 
+## Create Post category dropdown
+
+The Create Post form loads categories dynamically from `GET /categories`.
+
+### Behavior
+- The frontend requests categories from the backend when the Create Post form opens
+- Categories are displayed in a dropdown using the format `id - name`
+- The selected dropdown value is mapped back to the correct `category_id`
+- This improves usability compared with manually typing category IDs
+
+## Admin button visibility
+
+The frontend shows admin category buttons in the GUI but keeps them disabled by default.
+
+### Behavior
+- At startup, admin category buttons are disabled
+- After non-admin login, admin buttons remain disabled
+- After admin login, admin buttons are enabled
+- Backend permission checks still remain the source of truth
+
+## Logout flow
+
+The Tkinter frontend includes a logout workflow.
+
+### Behavior
+- Logout clears the saved token
+- Logout clears the current user information
+- The status label returns to `Not logged in`
+- Admin category buttons are disabled again
+- The active form is cleared
+- The output area shows a logout message
+
+
+

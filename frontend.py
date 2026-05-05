@@ -40,9 +40,29 @@ class BloggingAppGUI:
         tk.Button(button_frame, text="Create Post", width=15, command=self.show_create_post_form).grid(row=0, column=2, padx=5, pady=5)
         tk.Button(button_frame, text="List Posts", width=15, command=self.show_posts).grid(row=0, column=3, padx=5, pady=5)
         tk.Button(button_frame, text="List Categories", width=15, command=self.show_categories).grid(row=0, column=4, padx=5, pady=5)
+        tk.Button(button_frame, text="Logout", width=15, command=self.logout).grid(row=1, column=3, padx=5, pady=5)
         tk.Button(button_frame, text="Create Category", width=15, command=self.show_create_category_form).grid(row=1, column=0, padx=5, pady=5)
         tk.Button(button_frame, text="Update Category", width=15, command=self.show_update_category_form).grid(row=1, column=1, padx=5, pady=5)
         tk.Button(button_frame, text="Delete Category", width=15, command=self.show_delete_category_form).grid(row=1, column=2, padx=5, pady=5)
+
+        self.create_category_button = tk.Button(
+   	     button_frame, text="Create Category", width=15, command=self.show_create_category_form
+        )
+        self.create_category_button.grid(row=1, column=0, padx=5, pady=5)
+
+        self.update_category_button = tk.Button(
+            button_frame, text="Update Category", width=15, command=self.show_update_category_form
+        )
+        self.update_category_button.grid(row=1, column=1, padx=5, pady=5)
+
+        self.delete_category_button = tk.Button(
+           button_frame, text="Delete Category", width=15, command=self.show_delete_category_form
+        )
+        self.delete_category_button.grid(row=1, column=2, padx=5, pady=5)
+
+        self.create_category_button.config(state="disabled")
+        self.update_category_button.config(state="disabled")
+        self.delete_category_button.config(state="disabled")
 
 
         self.form_frame = tk.Frame(self.root)
@@ -146,6 +166,7 @@ class BloggingAppGUI:
         password_entry = tk.Entry(self.form_frame, width=30, show="*")
         password_entry.grid(row=1, column=1, padx=5, pady=5)
 
+
         def submit_login():
             payload = {
                 "email": email_entry.get().strip(),
@@ -170,6 +191,15 @@ class BloggingAppGUI:
                 user_email = self.current_user.get("email", "unknown")
                 is_admin = self.current_user.get("is_admin", False)
 
+                if is_admin:
+                    self.create_category_button.config(state="normal")
+                    self.update_category_button.config(state="normal")
+                    self.delete_category_button.config(state="normal")
+                else:
+                    self.create_category_button.config(state="disabled")
+                    self.update_category_button.config(state="disabled")
+                    self.delete_category_button.config(state="disabled")
+
                 self.status_label.config(
                     text=f"Logged in as {user_email} | Admin: {is_admin}",
                     fg="green"
@@ -188,6 +218,7 @@ class BloggingAppGUI:
             else:
                 self.write_output(str(result))
                 messagebox.showerror("Login Failed", result.get("error", "Unknown error"))
+
 
         tk.Button(self.form_frame, text="Submit Login", command=submit_login).grid(
             row=2, column=1, padx=5, pady=10, sticky="w"
@@ -520,6 +551,25 @@ class BloggingAppGUI:
 
         self.write_output("Delete Category form loaded.")
 
+
+
+    def logout(self):
+        self.token = None
+        self.current_user = None
+
+        self.status_label.config(
+            text="Not logged in",
+            fg="blue"
+        )
+
+        self.create_category_button.config(state="disabled")
+        self.update_category_button.config(state="disabled")
+        self.delete_category_button.config(state="disabled")
+
+        self.clear_form()
+        self.write_output("You have been logged out.")
+
+        messagebox.showinfo("Logout", "You have been logged out.")
 
 
 
