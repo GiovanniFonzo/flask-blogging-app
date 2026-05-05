@@ -267,26 +267,54 @@ The Tkinter frontend includes a logout workflow.
 
 ## Final test checklist
 
-- [ ] Backend starts on port 5050
-- [ ] Frontend starts correctly
-- [ ] Register normal user works
-- [ ] Register admin user works
-- [ ] Duplicate registration is rejected
-- [ ] Login works for normal user
-- [ ] Login works for admin user
-- [ ] Invalid login is rejected
-- [ ] Logout resets session state
-- [ ] Public category listing works
-- [ ] Admin category creation works
-- [ ] Admin category update works
-- [ ] Admin category delete works
-- [ ] Non-admin category management is rejected
-- [ ] Public post listing works
-- [ ] Logged-in user can create post
-- [ ] Create Post category dropdown works
-- [ ] Admin buttons enable only for admin
-- [ ] Admin buttons disable again after logout
-- [ ] Posts remain immutable (no edit/delete flow exists)
+- [x] Backend starts on port 5050
+- [x] Frontend starts correctly
+- [x] Register normal user works
+- [x] Register admin user works
+- [x] Duplicate registration is rejected
+- [x] Login works for normal user
+- [x] Login works for admin user
+- [x] Invalid login is rejected
+- [x] Logout resets session state
+- [x] Public category listing works
+- [x] Admin category creation works
+- [x] Admin category update works
+- [x] Admin category delete works
+- [x] Non-admin category management is rejected
+- [x] Public post listing works
+- [x] Logged-in user can create post
+- [x] Create Post category dropdown works
+- [x] Admin buttons enable only for admin
+- [x] Admin buttons disable again after logout
+- [x] Posts remain immutable (no edit/delete flow exists)
+
+## Final status
+
+The project has been tested end to end across:
+
+- registration
+- login
+- logout
+- role-aware admin controls
+- category create, update, and delete
+- post creation
+- public post and category reading
+- immutable post behavior
+
+## Release note
+
+This project is now in a working release state with:
+
+- Flask backend API
+- PostgreSQL database
+- SQLAlchemy ORM models and relationships
+- Tkinter desktop frontend
+- UUID token-based login
+- admin-only category management
+- authenticated post creation
+- public content reading
+- logout and role-aware frontend behavior
+
 
 
 
